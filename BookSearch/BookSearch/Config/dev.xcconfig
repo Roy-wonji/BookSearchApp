@@ -1,0 +1,10 @@
+//
+//  dev.xcconfig
+//  GoGo
+//
+//  Created by ha sungyong on 10/29/24.
+//
+
+OTHER_SWIFT_FLAGS[config=DEBUG][sdk=*] = $(inherited) -DDEBUG
+KAKAO_KEY=948ec7216fa5bb6917dfc71d1f60c9d1
+
