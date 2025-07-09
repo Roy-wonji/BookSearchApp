@@ -12,7 +12,7 @@ import DiContainer
 extension UseCaseModuleFactory {
   public var useCaseDefinitions: [() -> Module] {
     return [
-
+      registerModule.fetchBookUseCase
     ]
   }
 }

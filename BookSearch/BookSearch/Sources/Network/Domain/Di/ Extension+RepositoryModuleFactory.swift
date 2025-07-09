@@ -15,6 +15,7 @@ extension RepositoryModuleFactory {
     let registerModuleCopy = registerModule  // self를 직접 캡처하지 않고 복사
     repositoryDefinitions = {
       return [
+        registerModuleCopy.fetchBookRepository
 
       ]
     }()
