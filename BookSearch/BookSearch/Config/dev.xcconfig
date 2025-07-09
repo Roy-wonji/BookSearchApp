@@ -6,5 +6,6 @@
 //
 
 OTHER_SWIFT_FLAGS[config=DEBUG][sdk=*] = $(inherited) -DDEBUG
-KAKAO_KEY=948ec7216fa5bb6917dfc71d1f60c9d1
+KAKAO_KEY=7ae42659998b6ccf0068543c5972b30a
+BASE_URL=dapi.kakao.com/v3/
 
