@@ -8,7 +8,7 @@
 import Foundation
 // 1) 전체 검색 결과를 감싸는 Domain 모델
 struct BookSearchModel: Decodable {
-    let books: [Book]
+    var books: [Book]
     let paging: PagingInfo
 }
 
@@ -20,7 +20,8 @@ struct PagingInfo : Decodable{
 }
 
 // 3) 책 한 권 정보를 담는 모델
-struct Book: Decodable {
+struct Book: Decodable, Identifiable, Hashable {
+  var id = UUID()
     let title: String
     let authors: [String]
     let description: String
@@ -30,7 +31,27 @@ struct Book: Decodable {
     let price: Int?
     let salePrice: Int?
     let saleStatus: String?
-    let thumbnailURL: URL?
+    let thumbnailURL: String?
     let translators: [String]
     let detailURL: URL?          // DTO의 url
+}
+
+
+extension Book {
+  static var mock: Book {
+    Book(
+      title: "SS 8",
+      authors: ["하루모토 쇼헤이"],
+      description: "",
+      publishedAt: ISO8601DateFormatter().date(from: "2003-06-25T00:00:00.000+09:00"),
+      isbn: "8952942728 9788952942722",
+      publisher: "학산문화사",
+      price: 3000,
+      salePrice: -1,
+      saleStatus: "",
+      thumbnailURL: "",
+      translators: [],
+      detailURL: URL(string: "https://search.daum.net/search?w=bookpage&bookId=655874&q=SS+8")
+    )
+  }
 }
