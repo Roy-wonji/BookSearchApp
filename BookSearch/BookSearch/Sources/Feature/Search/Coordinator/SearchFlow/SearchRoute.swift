@@ -17,8 +17,8 @@ enum SearchRoute: Hashable {
   /// 검색 메인 화면
   case searchMain
 
-  /// 검색 상세 화면
-  case searchDetail
+  /// 검색 상세 화면 (선택된 도서)
+  case searchDetail(book: Book)
 
   // MARK: - 내부 전용 초기화
 
@@ -29,8 +29,10 @@ enum SearchRoute: Hashable {
   /// - Parameter route: 내부용 Route enum 값
   init(route: Route) {
     switch route {
-    case .searchMain: self = .searchMain
-    case .searchDetail: self = .searchDetail
+    case .searchMain:
+      self = .searchMain
+    case .searchDetail(let book):
+      self = .searchDetail(book: book)
     }
   }
 
@@ -38,10 +40,7 @@ enum SearchRoute: Hashable {
 
   /// 외부 접근은 가능하지만 직접 SearchRoute를 생성할 수 없도록 제어하기 위한 내부 enum입니다.
   enum Route {
-    /// 검색 메인 화면
     case searchMain
-
-    /// 검색 상세 화면
-    case searchDetail
+    case searchDetail(book: Book)
   }
 }

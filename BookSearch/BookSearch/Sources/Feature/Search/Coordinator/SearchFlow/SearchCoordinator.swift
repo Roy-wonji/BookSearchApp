@@ -30,6 +30,11 @@ final class SearchCoordinator: ObservableObject, NavigationControlling {
     path.append(SearchRoute(route: .searchMain))
   }
 
+  func searchBookDetailView(book: Book) {
+    path.append(SearchRoute(route: .searchDetail(book: book)))
+  }
+
+
   // MARK: - 초기 진입 설정
 
   /// Coordinator를 시작합니다.

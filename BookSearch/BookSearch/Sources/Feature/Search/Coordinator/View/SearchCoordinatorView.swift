@@ -27,9 +27,10 @@ extension SearchCoordinatorView {
       SearchListView()
         .navigationBarBackButtonHidden()
 
-    case .searchDetail:
-      EmptyView()
+    case .searchDetail(let book):
+      SearchDetailView(book: book)
         .navigationBarBackButtonHidden()
+        .toolbar(.hidden, for: .tabBar)
     }
   }
 }
