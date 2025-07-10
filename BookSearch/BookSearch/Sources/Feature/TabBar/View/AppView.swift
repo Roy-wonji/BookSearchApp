@@ -13,62 +13,48 @@ struct AppView: View {
   @StateObject private var favoriteCoordinator = FavoriteCoordinator()
 
   var body: some View {
-    VStack(spacing: 0) {
-      // Content View
-      ZStack {
-        switch coordinator.selectedTab {
-        case .search:
-          SearchCoordinatorView()
-            .environmentObject(serchCoordinator)
-        case .favorites:
-          FavoriteCoordinatorView()
-            .environmentObject(favoriteCoordinator)
+    TabView(selection: $coordinator.selectedTab) {
+      SearchCoordinatorView()
+        .environmentObject(serchCoordinator)
+        .tabItem {
+          tabBarItem(
+            systemName: "magnifyingglass",
+            title: "검색",
+            tab: .search
+          )
         }
-      }
+        .tag(AppTab.search)
 
-      // Custom Tab Bar
-      tabBar()
+      FavoriteCoordinatorView()
+        .environmentObject(favoriteCoordinator)
+        .tabItem {
+          tabBarItem(
+            systemName: "heart.fill",
+            title: "즐겨찾기",
+            tab: .favorites
+          )
+        }
+        .tag(AppTab.favorites)
     }
   }
-
 }
 
 extension AppView {
-@ViewBuilder
-  private func tabBar() -> some View {
-    // Custom Tab Bar
-    HStack {
-      Spacer()
-      tabBarItem(
-        systemName: "magnifyingglass",
-        title: "검색",
-        tab: .search
-      )
-      Spacer()
-      tabBarItem(
-        systemName: "heart.fill",
-        title: "즐겨찾기",
-        tab: .favorites
-      )
-      Spacer()
-    }
-    .frame(height: 56)
-    .background(Color.white)
-    .shadow(color: .black.opacity(0.1), radius: 4, y: -2)
-  }
-
-
   @ViewBuilder
-  private func tabBarItem(systemName: String, title: String, tab: AppTab) -> some View {
+  private func tabBarItem(
+    systemName: String,
+    title: String,
+    tab: AppTab
+  ) -> some View {
     VStack(spacing: 4) {
       Image(systemName: systemName)
         .font(.system(size: 20))
-        .foregroundColor(coordinator.selectedTab == tab ? .blue : .gray)
+        .foregroundColor(coordinator.selectedTab == tab ? .blue30 : .gray40)
         .bold()
 
       Text(title)
-        .font(.system(size: 12))
-        .foregroundColor(coordinator.selectedTab == tab ? .blue : .gray)
+        .pretendardFont(family: .Regular, size: 12)
+        .foregroundColor(coordinator.selectedTab == tab ? .blue30 : .gray40)
         .bold()
     }
     .padding(.top, 8)
