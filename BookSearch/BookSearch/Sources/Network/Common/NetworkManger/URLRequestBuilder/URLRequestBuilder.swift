@@ -8,10 +8,19 @@
 import Foundation
 import LogMacro
 
+/// TargetType을 기반으로 URLRequest를 생성하는 빌더 클래스입니다.
+///
+/// - 파라미터 인코딩, 헤더 설정, URL 조합 등 네트워크 요청 생성의 모든 과정을 담당합니다.
 class URLRequestBuilder {
+  /// 기본 생성자
   public init() {}
-
-  @MainActor static func buildRequest(from target: TargetType) -> URLRequest {
+  
+  /// TargetType을 받아 URLRequest를 생성합니다.
+  ///
+  /// - Parameter target: 네트워크 요청 정보가 담긴 TargetType
+  /// - Returns: 완성된 URLRequest
+  @MainActor
+  static func buildRequest(from target: TargetType) -> URLRequest {
     // URL 생성 시 불필요한 공백을 제거하기 위한 trim 적용
     let url = target.baseURL.appendingPathComponent(
       target.path.trimmingCharacters(in: .whitespaces)
@@ -19,11 +28,13 @@ class URLRequestBuilder {
     var components = URLComponents(url: url, resolvingAgainstBaseURL: false)
     var request = URLRequest(url: components?.url ?? url)
     request.httpMethod = target.method.rawValue
-
+    
+    // 헤더 추가
     if let headers = target.headers {
       headers.forEach { request.setValue($1, forHTTPHeaderField: $0) }
     }
-
+    
+    // 파라미터 및 인코딩 처리
     switch target.task {
     case .requestParameters(let parameters, let encoding):
       do {
@@ -45,13 +56,13 @@ class URLRequestBuilder {
         Log.error("Failed to encode composite parameters: %{public}@", error.localizedDescription)
       }
     case .requestPlain:
-      // No parameters should be added for requestPlain, ignoring any accidental parameters
+      // 파라미터 없이 단순 요청
       components?.queryItems = nil
       request.url = components?.url
     default:
       break
     }
-
+    
     return request
   }
 }

@@ -7,19 +7,29 @@
 
 import SwiftUI
 
+/// 도서 상세 정보를 보여주는 View입니다.
+///
+/// - 도서 제목, 표지, 상세 정보, 책 소개, 즐겨찾기 토글 및 뒤로가기 버튼을 포함합니다.
 struct SearchDetailView: View {
+  /// 상세 표시할 도서 (Binding)
   @Binding var book: Book
-  var isFavorite: Bool
-  var onToggleFavorite: () -> Void
-  var backAction: ()  -> Void
 
+  /// 즐겨찾기 여부
+  var isFavorite: Bool
+
+  /// 즐겨찾기 토글 액션
+  var onToggleFavorite: () -> Void
+
+  /// 뒤로가기 액션
+  var backAction: () -> Void
 
   var body: some View {
-    ZStack{
+    ZStack {
       Color.white
         .edgesIgnoringSafeArea(.all)
 
-      VStack{
+      VStack {
+        // 커스텀 네비게이션 바 (뒤로가기, 즐겨찾기)
         CustomNavigationBackBar(
           isFavorite: isFavorite,
           buttonAction: {
@@ -29,6 +39,7 @@ struct SearchDetailView: View {
             onToggleFavorite()
           }
         )
+        // 도서 상세 정보
         bookDetailView(book: book)
           .padding(.top, 10)
       }
@@ -37,6 +48,7 @@ struct SearchDetailView: View {
 }
 
 extension SearchDetailView {
+  /// 도서 상세 정보 뷰
   @ViewBuilder
   func bookDetailView(book: Book) -> some View {
     ScrollView {
@@ -78,7 +90,7 @@ extension SearchDetailView {
           .foregroundColor(.staticBlack)
         }
 
-
+        // 책 소개
         bookDescriptionView(book: book)
           .padding(.top, 20)
       }
@@ -86,7 +98,7 @@ extension SearchDetailView {
     }
   }
 
-
+  /// 책 소개 뷰
   @ViewBuilder
   func bookDescriptionView(book: Book) -> some View {
     VStack(alignment: .leading, spacing: 8) {
@@ -104,6 +116,7 @@ extension SearchDetailView {
     }
   }
 
+  /// 날짜를 "yyyy년 MM월 dd일" 형식으로 변환
   private func formattedDate(_ date: Date?) -> String {
     guard let date else { return "-" }
     let formatter = DateFormatter()
@@ -111,12 +124,12 @@ extension SearchDetailView {
     return formatter.string(from: date)
   }
 
+  /// 가격을 "N원" 형식으로 변환
   private func priceText(_ price: Int?) -> String {
     guard let price, price >= 0 else { return "N원" }
     return "\(price)원"
   }
 }
-
 
 #Preview {
   @State var book = Book.mock
