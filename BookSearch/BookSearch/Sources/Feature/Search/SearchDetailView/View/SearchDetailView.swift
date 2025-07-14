@@ -8,8 +8,11 @@
 import SwiftUI
 
 struct SearchDetailView: View {
-  @EnvironmentObject private var coordinator: SearchCoordinator
-  var book: Book
+  @Binding var book: Book
+  var isFavorite: Bool
+  var onToggleFavorite: () -> Void
+  var backAction: ()  -> Void
+
 
   var body: some View {
     ZStack{
@@ -17,13 +20,17 @@ struct SearchDetailView: View {
         .edgesIgnoringSafeArea(.all)
 
       VStack{
-        CustomNavigationBackBar {
-          coordinator.goBack()
-        }
-
+        CustomNavigationBackBar(
+          isFavorite: isFavorite,
+          buttonAction: {
+            backAction()
+          },
+          onToggleFavorite: {
+            onToggleFavorite()
+          }
+        )
         bookDetailView(book: book)
           .padding(.top, 10)
-
       }
     }
   }
@@ -110,7 +117,11 @@ extension SearchDetailView {
   }
 }
 
+
 #Preview {
-  let book = Book.mock
-  SearchDetailView(book:  book)
+  @State var book = Book.mock
+  var viewmodel = BookListViewModel()
+  SearchDetailView(book:  $book, isFavorite: viewmodel.isFavorite(book)) {
+    viewmodel.isFavorite(book)
+  } backAction: {}
 }
