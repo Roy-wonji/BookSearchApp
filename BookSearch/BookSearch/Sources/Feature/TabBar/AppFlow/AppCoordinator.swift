@@ -9,4 +9,5 @@ import SwiftUI
 
 final class AppCoordinator: ObservableObject {
   @Published var selectedTab: AppTab = .search
+  @Published var isTabBarHidden: Bool = false
 }
