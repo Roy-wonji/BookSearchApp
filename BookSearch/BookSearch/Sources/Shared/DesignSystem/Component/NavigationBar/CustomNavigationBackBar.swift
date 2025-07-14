@@ -9,15 +9,22 @@ import SwiftUI
 
 struct CustomNavigationBackBar: View {
   var buttonAction: () -> Void = { }
+   var isFavorite: Bool
+  var onToggleFavorite: () -> Void
 
-  public init(
-    buttonAction: @escaping () -> Void
+   init(
+    isFavorite: Bool,
+    buttonAction: @escaping () -> Void,
+    onToggleFavorite: @escaping () -> Void
   ) {
     self.buttonAction = buttonAction
+    self.isFavorite = isFavorite
+    self.onToggleFavorite = onToggleFavorite
   }
 
   public var body: some View {
     HStack {
+      // 왼쪽: 뒤로가기
       Image(systemName: "chevron.left")
         .resizable()
         .scaledToFit()
@@ -26,7 +33,18 @@ struct CustomNavigationBackBar: View {
         .onTapGesture {
           buttonAction()
         }
+
       Spacer()
+
+      // 오른쪽: 즐겨찾기
+      Image(systemName: isFavorite ? "heart.fill" : "heart")
+        .resizable()
+        .scaledToFit()
+        .frame(width: 20, height: 20)
+        .foregroundStyle(isFavorite ? .red : .gray)
+        .onTapGesture {
+          onToggleFavorite()
+        }
     }
     .padding(.horizontal, 24)
   }
