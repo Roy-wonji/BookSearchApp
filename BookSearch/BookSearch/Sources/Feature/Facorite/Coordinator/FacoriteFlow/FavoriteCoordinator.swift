@@ -30,6 +30,10 @@ final class FavoriteCoordinator: ObservableObject, NavigationControlling {
     path.append(FavoriteRoute(route: .favoriteMain))
   }
 
+  func searchFavoriteDetailView(book: Book) {
+    path.append(FavoriteRoute(route: .favoriteDetail(book: book)))
+  }
+
   // MARK: - 초기 진입 설정
 
   /// Coordinator를 시작합니다.

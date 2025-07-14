@@ -17,7 +17,7 @@ enum FavoriteRoute: Hashable {
   case favoriteMain
 
   /// 즐겨찾기 상세 화면
-  case favoriteDetail
+  case favoriteDetail(book: Book)
 
   // MARK: - 내부 전용 초기화
 
@@ -29,7 +29,8 @@ enum FavoriteRoute: Hashable {
   init(route: Route) {
     switch route {
     case .favoriteMain: self = .favoriteMain
-    case .favoriteDetail: self = .favoriteDetail
+    case .favoriteDetail(let book):
+      self = .favoriteDetail(book: book)
     }
   }
 
@@ -41,6 +42,6 @@ enum FavoriteRoute: Hashable {
     case favoriteMain
 
     /// 즐겨찾기 상세 화면
-    case favoriteDetail
+    case favoriteDetail(book: Book)
   }
 }
