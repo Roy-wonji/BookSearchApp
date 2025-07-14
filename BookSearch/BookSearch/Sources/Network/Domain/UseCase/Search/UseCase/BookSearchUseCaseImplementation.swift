@@ -1,5 +1,5 @@
 //
-//  FetchBooksUseCaseImplementation.swift
+//  BookSearchUseCaseImplementation.swift
 //  BookSearch
 //
 //  Created by Wonji Suh  on 7/10/25.
@@ -11,7 +11,7 @@ import DiContainer
 /// 도서 검색 및 즐겨찾기 유스케이스 구현체입니다.
 ///
 /// - BookSearchRepositoryProtocol을 주입받아 실제 비즈니스 로직을 수행합니다.
-struct FetchBooksUseCaseImplementation: FetchBooksUseCaseProtocol {
+struct BookSearchUseCaseImplementation: BookSearchUseCaseProtocol {
   /// 도서 검색/즐겨찾기 저장소
   private let repository: BookSearchRepositoryProtocol
 
@@ -46,19 +46,19 @@ struct FetchBooksUseCaseImplementation: FetchBooksUseCaseProtocol {
 
 extension RegisterModule {
   /// 도서 검색 유스케이스 모듈을 등록합니다.
-  var fetchBookUseCase: () -> Module {
+  var bookSearchUseCase: () -> Module {
     makeUseCaseWithRepository(
-      FetchBooksUseCaseProtocol.self,
+      BookSearchUseCaseProtocol.self,
       repositoryProtocol: BookSearchRepositoryProtocol.self,
       repositoryFallback: MockBookRepository(),
       factory: { repo in
-        FetchBooksUseCaseImplementation(repository: repo)
+        BookSearchUseCaseImplementation(repository: repo)
       }
     )
   }
 
   /// 도서 검색 저장소 모듈을 등록합니다.
-  var fetchBookRepository: () -> Module {
+  var bookSearcBookRepository: () -> Module {
     makeDependency(BookSearchRepositoryProtocol.self) {
       BookRepositoryImplementation()
     }

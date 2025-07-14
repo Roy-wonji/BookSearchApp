@@ -52,8 +52,8 @@ final class BookListViewModel: ObservableObject {
   @Published var detailSearchBook: Book = .initBook
   
   /// 도서 검색 UseCase (의존성 주입)
-  private let useCase: FetchBooksUseCaseProtocol
-  
+  private let useCase: BookSearchUseCaseProtocol
+
   // MARK: - 초기화
   
   /// ViewModel 초기화
@@ -67,7 +67,7 @@ final class BookListViewModel: ObservableObject {
     self.favoriteBooksStore = favoriteBooksStore
     
     // UseCase DI (없으면 기본 구현 등록)
-    if let resolved: FetchBooksUseCaseProtocol = container.resolve(FetchBooksUseCaseProtocol.self) {
+    if let resolved: BookSearchUseCaseProtocol = container.resolve(BookSearchUseCaseProtocol.self) {
       self.useCase = resolved
     } else {
       if container.resolve(BookSearchRepositoryProtocol.self) == nil {
@@ -75,11 +75,11 @@ final class BookListViewModel: ObservableObject {
           BookRepositoryImplementation()
         }
       }
-      container.register(FetchBooksUseCaseProtocol.self) {
+      container.register(BookSearchUseCaseProtocol.self) {
         let repo = container.resolveOrDefault(BookSearchRepositoryProtocol.self, default: BookRepositoryImplementation())
-        return FetchBooksUseCaseImplementation(repository: repo)
+        return BookSearchUseCaseImplementation(repository: repo)
       }
-      guard let useCaseImpl = container.resolve(FetchBooksUseCaseProtocol.self) else {
+      guard let useCaseImpl = container.resolve(BookSearchUseCaseProtocol.self) else {
         fatalError("FetchBooksUseCaseProtocol resolve 실패")
       }
       self.useCase = useCaseImpl
@@ -213,7 +213,7 @@ final class BookListViewModel: ObservableObject {
   /// 클라이언트에서 정렬 기준/방향에 따라 정렬합니다.
   /// - Parameter model: 정렬할 BookSearchModel
   /// - Returns: 정렬된 BookSearchModel
-  private func sortClientSide(_ model: BookSearchModel) -> BookSearchModel {
+  func sortClientSide(_ model: BookSearchModel) -> BookSearchModel {
     var sortedBooks = model.books
     switch sortType {
     case .accuracy:

@@ -8,25 +8,37 @@
 import Foundation
 import LogMacro
 
-/// 도서 검색 및 즐겨찾기 기능을 제공하는 저장소 구현체입니다.
-///
-/// - 네트워크 검색은 provider를 통해, 즐겨찾기는 Keychain을 통해 관리합니다.
-/// - ObservableObject로 선언되어 SwiftUI 등에서 바인딩 가능합니다.
+/**
+ 도서 검색 및 즐겨찾기 기능을 제공하는 저장소 구현체입니다.
+ 
+ - 네트워크 검색은 provider를 통해, 즐겨찾기는 KeychainStorable을 통해 관리합니다.
+ - ObservableObject로 선언되어 SwiftUI 등에서 바인딩 가능합니다.
+ */
 final class BookRepositoryImplementation: ObservableObject, BookSearchRepositoryProtocol {
+  
   /// 네트워크 요청용 Provider
   private let provider: AsyncProvider<SearchService>
   
-  /// 생성자
-  /// - Parameter provider: 네트워크 요청 Provider (기본값: .init())
-  public init(provider: AsyncProvider<SearchService> = .init()) {
+  /**
+   생성자
+   
+   - Parameters:
+   - provider: 네트워크 요청 Provider (기본값: .init())
+   - keychain: KeychainStorable 구현체 (기본값: KeychainHelper())
+   */
+  public init(
+    provider: AsyncProvider<SearchService> = .init()
+  ) {
     self.provider = provider
   }
   
-  /// 도서 검색 API 호출 및 결과 반환
-  ///
-  /// - Parameter request: 검색 요청 파라미터
-  /// - Returns: BookSearchModel(검색 결과) 또는 nil
-  /// - Throws: 네트워크/디코딩 등 오류 발생 시 에러
+  /**
+   도서 검색 API 호출 및 결과 반환
+   
+   - Parameter request: 검색 요청 파라미터
+   - Returns: BookSearchModel(검색 결과) 또는 nil
+   - Throws: 네트워크/디코딩 등 오류 발생 시 에러
+   */
   func fetchBooks(request: BookSearchRequest) async throws -> BookSearchModel? {
     let dto: BookSearchDTOModel = try await provider.requestAsync(
       .search(request: request),
@@ -35,9 +47,11 @@ final class BookRepositoryImplementation: ObservableObject, BookSearchRepository
     return dto.toDomain()
   }
   
-  /// 도서의 즐겨찾기 상태를 토글(추가/삭제)합니다. (Keychain 기반)
-  ///
-  /// - Parameter book: 즐겨찾기 상태를 변경할 도서
+  /**
+   도서의 즐겨찾기 상태를 토글(추가/삭제)합니다. (Keychain 기반)
+   
+   - Parameter book: 즐겨찾기 상태를 변경할 도서
+   */
   func toggleFavorite(_ book: Book) async {
     guard let isbn = book.isbn else { return }
     
@@ -108,9 +122,11 @@ final class BookRepositoryImplementation: ObservableObject, BookSearchRepository
     }
   }
   
-  /// Keychain에서 즐겨찾기 ISBN 집합을 읽어 옵니다.
-  ///
-  /// - Returns: 즐겨찾기된 도서의 ISBN Set
+  /**
+   Keychain에서 즐겨찾기 ISBN 집합을 읽어 옵니다.
+   
+   - Returns: 즐겨찾기된 도서의 ISBN Set
+   */
   func loadFavorites() async -> Set<String> {
     do {
       return try KeychainHelper.load(Set<String>.self, for: .favoriteISBNs) ?? []
@@ -120,10 +136,12 @@ final class BookRepositoryImplementation: ObservableObject, BookSearchRepository
     }
   }
   
-  /// 도서가 즐겨찾기인지 Keychain에서 확인합니다.
-  ///
-  /// - Parameter book: 확인할 도서
-  /// - Returns: 즐겨찾기 여부 (true/false)
+  /**
+   도서가 즐겨찾기인지 Keychain에서 확인합니다.
+   
+   - Parameter book: 확인할 도서
+   - Returns: 즐겨찾기 여부 (true/false)
+   */
   func isFavorite(_ book: Book) async -> Bool {
     guard let isbn = book.isbn else { return false }
     let favs = await loadFavorites()

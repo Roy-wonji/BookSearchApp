@@ -18,7 +18,7 @@ extension UseCaseModuleFactory {
   public var useCaseDefinitions: [() -> Module] {
     let registerModuleCopy = registerModule  // self를 직접 캡처하지 않고 복사
     return [
-      registerModuleCopy.fetchBookUseCase,
+      registerModuleCopy.bookSearchUseCase,
       registerModuleCopy.favoriteBookUseCase
     ]
   }

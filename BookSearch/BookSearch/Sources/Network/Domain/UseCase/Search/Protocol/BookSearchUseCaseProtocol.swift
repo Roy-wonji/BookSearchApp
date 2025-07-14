@@ -1,5 +1,5 @@
 //
-//  FetchBooksUseCaseProtocol.swift
+//  BookSearchUseCaseProtocol.swift
 //  BookSearch
 //
 //  Created by Wonji Suh  on 7/10/25.
@@ -10,7 +10,7 @@ import Foundation
 /// 도서 검색 및 즐겨찾기 관련 유스케이스 인터페이스 프로토콜입니다.
 ///
 /// - 도서 검색, 즐겨찾기 토글, 즐겨찾기 여부 확인, 즐겨찾기 목록 조회 기능을 제공합니다.
-protocol FetchBooksUseCaseProtocol {
+protocol BookSearchUseCaseProtocol {
   /// 도서 검색을 실행합니다.
   ///
   /// - Parameter request: 검색 요청 파라미터

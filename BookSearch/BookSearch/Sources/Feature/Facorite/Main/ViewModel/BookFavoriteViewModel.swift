@@ -190,7 +190,7 @@ final class BookFavoriteViewModel: ObservableObject {
   // MARK: - 필터/정렬 적용
   
   /// 검색어 및 정렬 기준에 따라 리스트 필터링/정렬
-  private func applyFilters() {
+   func applyFilters() {
     var filtered = favoriteBookList.books
     
     // 1. 검색어 필터
@@ -212,6 +212,9 @@ final class BookFavoriteViewModel: ObservableObject {
     }
     
     favoriteBookList = BookSearchModel(books: filtered, paging: favoriteBookList.paging)
+     Task{
+       await loadFavoriteBooks()
+     }
   }
   
   /// 해당 도서가 즐겨찾기 상태인지 여부 반환
