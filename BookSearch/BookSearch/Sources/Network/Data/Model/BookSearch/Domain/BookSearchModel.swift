@@ -7,20 +7,20 @@
 
 import Foundation
 // 1) 전체 검색 결과를 감싸는 Domain 모델
-struct BookSearchModel: Decodable {
+struct BookSearchModel: Codable {
     var books: [Book]
-    let paging: PagingInfo
+    var paging: PagingInfo
 }
 
 // 2) 페이징 정보
-struct PagingInfo : Decodable{
+struct PagingInfo : Codable{
     let isEnd: Bool
     let pageableCount: Int
     let totalCount: Int
 }
 
 // 3) 책 한 권 정보를 담는 모델
-struct Book: Decodable, Identifiable, Hashable {
+struct Book: Codable, Identifiable, Hashable {
   var id = UUID()
     let title: String
     let authors: [String]
@@ -34,6 +34,8 @@ struct Book: Decodable, Identifiable, Hashable {
     let thumbnailURL: String?
     let translators: [String]
     let detailURL: URL?          // DTO의 url
+
+  var isFavorite: Bool = false
 }
 
 
@@ -53,5 +55,29 @@ extension Book {
       translators: [],
       detailURL: URL(string: "https://search.daum.net/search?w=bookpage&bookId=655874&q=SS+8")
     )
+  }
+
+  static var initBook: Book {
+    Book(
+      title: "",
+      authors: [""],
+      description: "",
+      publishedAt: Date(),
+      isbn: "",
+      publisher: "",
+      price: 0,
+      salePrice: 0,
+      saleStatus: "",
+      thumbnailURL: "",
+      translators: [],
+      detailURL: URL(string: "")
+    )
+  }
+}
+
+
+extension BookSearchModel {
+  static var initModel: BookSearchModel {
+    .init(books: [], paging: PagingInfo(isEnd: true, pageableCount: 0, totalCount: 0))
   }
 }

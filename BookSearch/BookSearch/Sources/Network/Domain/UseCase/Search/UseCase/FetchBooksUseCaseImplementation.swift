@@ -18,8 +18,19 @@ struct FetchBooksUseCaseImplementation: FetchBooksUseCaseProtocol {
    func execute(request: BookSearchRequest) async throws -> BookSearchModel? {
     return try await repository.fetchBooks(request: request)
   }
-}
 
+  func toggleFavorite(_ book: Book) async {
+    return await repository.toggleFavorite(book)
+  }
+
+  func isFavorite(_ book: Book) async -> Bool {
+    return await repository.isFavorite(book)
+  }
+
+  func loadFavorites() async -> Set<String> {
+    return await repository.loadFavorites()
+  }
+}
 
 extension DependencyContainer {
   var fetchBookUseCase: BookSearchRepositoryProtocol? { 

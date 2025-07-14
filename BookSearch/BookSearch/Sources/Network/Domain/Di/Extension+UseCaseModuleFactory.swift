@@ -11,8 +11,10 @@ import DiContainer
 
 extension UseCaseModuleFactory {
   public var useCaseDefinitions: [() -> Module] {
+    let registerModuleCopy = registerModule  // self를 직접 캡처하지 않고 복사
     return [
-      registerModule.fetchBookUseCase
+      registerModuleCopy.fetchBookUseCase,
+      registerModuleCopy.favoriteBookUseCase
     ]
   }
 }
